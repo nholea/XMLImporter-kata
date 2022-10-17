@@ -12,17 +12,23 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.nio.file.Files.walk;
 
 public class BatchXmlImporter {
 
     public void importFiles(Path folderPath) throws IOException, JAXBException, SQLException {
         final String fileExtension = ".xml";
-        List<Path> paths = Files.walk(folderPath)
+        List<Path> paths;
+        try (Stream<Path> pathStream = walk(folderPath)
                 .filter(Files::isRegularFile)
                 .filter(filePath ->
                         filePath.toString()
-                                .endsWith(fileExtension))
-                .collect(Collectors.toList());
+                                .endsWith(fileExtension))) {
+            paths = pathStream
+                    .collect(Collectors.toList());
+        }
         ArrayList<Company> companies = new ArrayList<>();
         for (Path path : paths) {
             File file = new File(path.toString());
