@@ -28,10 +28,7 @@ public class BatchXmlImporter {
     //Recorre los files con extension XML y los parsea y los añade al array de companies
     ArrayList<Company> companies = new ArrayList<>();
     for (Path path : paths) {
-      File file = new File(path.toString());
-      JAXBContext jaxbContext = JAXBContext.newInstance(Company.class);
-      Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-      Company company = (Company) jaxbUnmarshaller.unmarshal(file);
+      Company company = parseCompanyToJAXBContextFormat(path);
       companies.add(company);
     }
 
@@ -78,7 +75,15 @@ public class BatchXmlImporter {
     }
   }
 
-  private static List<Path> findXmlFilePathExtension(Path folderPath) {
+  private static Company parseCompanyToJAXBContextFormat(Path path) throws JAXBException {
+    File file = new File(path.toString());
+    JAXBContext jaxbContext = JAXBContext.newInstance(Company.class);
+    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+    Company company = (Company) jaxbUnmarshaller.unmarshal(file);
+    return company;
+  }
+
+  private static List<Path> findXmlFilePathExtension(Path folderPath) throws IOException {
     final String fileExtension = ".xml";
     List<Path> paths;
     try (Stream<Path> pathStream = walk(folderPath)
