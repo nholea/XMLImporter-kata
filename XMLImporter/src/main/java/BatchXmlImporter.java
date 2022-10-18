@@ -1,7 +1,4 @@
-import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -18,10 +15,13 @@ import xmlmodels.Staff;
 public class BatchXmlImporter {
 
   private final FileExtensionFinder fileExtensionFinder;
+  private final DataParsing dataParsing;
 
-  public BatchXmlImporter(FileExtensionFinder fileExtensionFinder) {
+  public BatchXmlImporter(FileExtensionFinder fileExtensionFinder, DataParsing dataParsing) {
     this.fileExtensionFinder = fileExtensionFinder;
+    this.dataParsing = dataParsing;
   }
+
 
   public void importFiles(Path folderPath) throws IOException, JAXBException, SQLException {
     List<Path> paths = fileExtensionFinder.findXmlPaths(folderPath);
@@ -88,20 +88,13 @@ public class BatchXmlImporter {
     return companyId;
   }
 
-  private static ArrayList<Company> getParsedCompanies(List<Path> paths) throws JAXBException {
+  private ArrayList<Company> getParsedCompanies(List<Path> paths) throws JAXBException {
     ArrayList<Company> companies = new ArrayList<>();
     for (Path path : paths) {
-      Company company = parseCompanyToJAXBContextFormat(path);
+      Company company = dataParsing.parseCompanyToJAXBContextFormat(path);//daparseCompanyToJAXBContextFormat(path);
       companies.add(company);
     }
     return companies;
-  }
-
-  private static Company parseCompanyToJAXBContextFormat(Path path) throws JAXBException {
-    File file = new File(path.toString());
-    JAXBContext jaxbContext = JAXBContext.newInstance(Company.class);
-    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-    return (Company) jaxbUnmarshaller.unmarshal(file);
   }
 
 
