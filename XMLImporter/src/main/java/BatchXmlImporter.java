@@ -24,27 +24,32 @@ public class BatchXmlImporter {
 
   public void importFiles(Path folderPath) throws IOException, JAXBException, SQLException {
     List<Path> paths = findXmlFilePathExtension(folderPath);
-
     ArrayList<Company> companies = getParsedCompanies(paths);
-
     for (Company company : companies) {
-      try (Connection conn = DriverManager.getConnection(
-        "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "postgres")) {
+      insertCompany(company);
+    }
+  }
 
-        int companyId;
-        try (PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO company(name) VALUES (?)",
-          Statement.RETURN_GENERATED_KEYS)) {
-          preparedStatement.setString(1, company.name);
-          preparedStatement.executeUpdate();
 
-          companyId = getCompanyId(preparedStatement);
-        }
+  private static void insertCompany(Company company) throws SQLException {
+    try (Connection conn = DriverManager.getConnection(
+      "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "postgres")) {
 
-        for (Staff staff : company.staff) {
-          insertStaff(conn, companyId, staff);
-          insertSalary(conn, staff);
-        }
+      int companyId = getGeneratedKeyForCompany(company, conn);
+      for (Staff staff : company.staff) {
+        insertStaff(conn, companyId, staff);
+        insertSalary(conn, staff);
       }
+    }
+  }
+
+  private static int getGeneratedKeyForCompany(Company company, Connection conn) throws SQLException {
+    try (PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO company(name) VALUES (?)",
+      Statement.RETURN_GENERATED_KEYS)) {
+      preparedStatement.setString(1, company.name);
+      preparedStatement.executeUpdate();
+
+      return getCompanyId(preparedStatement);
     }
   }
 
