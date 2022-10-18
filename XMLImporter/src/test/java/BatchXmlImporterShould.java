@@ -25,7 +25,8 @@ class BatchXmlImporterShould {
   public void import_xml_into_database() throws JAXBException, IOException, SQLException {
     DataParsing dataParsing = new DataParsing();
     FileExtensionFinder fileExtensionFinder = new FileExtensionFinder();
-    BatchXmlImporter batchXmlImporter = new BatchXmlImporter(fileExtensionFinder, dataParsing);
+    DataBaseActions dataBaseActions = new DataBaseActions();
+    BatchXmlImporter batchXmlImporter = new BatchXmlImporter(fileExtensionFinder, dataParsing, dataBaseActions);
     clearTables();
 
     batchXmlImporter.importFiles(path);
