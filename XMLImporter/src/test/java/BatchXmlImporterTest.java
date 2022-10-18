@@ -15,7 +15,7 @@ import xmlmodels.Company;
 import xmlmodels.Salary;
 import xmlmodels.Staff;
 
-class BatchXmlImporterShould {
+class BatchXmlImporterTest {
 
 
   final Path path = Path.of(
