@@ -40,19 +40,22 @@ public class BatchXmlImporter {
 
           companyId = getCompanyId(preparedStatement);
         }
-        // Recorre el staff y inserta en la tabla sql el staff de comapany y salary
+        
         for (Staff staff : company.staff) {
           insertStaff(conn, companyId, staff);
-
-          try (PreparedStatement preparedStatement = conn.prepareStatement(
-            "INSERT INTO salary(staff_id, currency, value) VALUES (?,?,?)")) {
-            preparedStatement.setInt(1, staff.id);
-            preparedStatement.setString(2, staff.salary.currency);
-            preparedStatement.setInt(3, staff.salary.value);
-            preparedStatement.executeUpdate();
-          }
+          insertSalary(conn, staff);
         }
       }
+    }
+  }
+
+  private static void insertSalary(Connection conn, Staff staff) throws SQLException {
+    try (PreparedStatement preparedStatement = conn.prepareStatement(
+      "INSERT INTO salary(staff_id, currency, value) VALUES (?,?,?)")) {
+      preparedStatement.setInt(1, staff.id);
+      preparedStatement.setString(2, staff.salary.currency);
+      preparedStatement.setInt(3, staff.salary.value);
+      preparedStatement.executeUpdate();
     }
   }
 
