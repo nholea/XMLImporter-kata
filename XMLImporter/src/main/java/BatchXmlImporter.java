@@ -1,11 +1,8 @@
-import static java.nio.file.Files.walk;
-
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,15 +12,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import xmlmodels.Company;
 import xmlmodels.Staff;
 
 public class BatchXmlImporter {
 
+  private final FileExtensionFinder fileExtensionFinder;
+
+  public BatchXmlImporter(FileExtensionFinder fileExtensionFinder) {
+    this.fileExtensionFinder = fileExtensionFinder;
+  }
+
   public void importFiles(Path folderPath) throws IOException, JAXBException, SQLException {
-    List<Path> paths = findXmlFilePathExtension(folderPath);
+    List<Path> paths = fileExtensionFinder.findXmlPaths(folderPath);
     ArrayList<Company> companies = getParsedCompanies(paths);
     for (Company company : companies) {
       insertCompany(company);
@@ -103,18 +104,5 @@ public class BatchXmlImporter {
     return (Company) jaxbUnmarshaller.unmarshal(file);
   }
 
-  private static List<Path> findXmlFilePathExtension(Path folderPath) throws IOException {
-    final String fileExtension = ".xml";
-    List<Path> paths;
-    try (Stream<Path> pathStream = walk(folderPath)
-      .filter(Files::isRegularFile)
-      .filter(filePath ->
-        filePath.toString()
-          .endsWith(fileExtension))) {
-      paths = pathStream
-        .collect(Collectors.toList());
-    }
-    return paths;
-  }
 
 }
