@@ -24,7 +24,7 @@ public class BatchXmlImporter {
     List<Path> paths = fileExtensionFinder.findXmlPaths(folderPath);
     ArrayList<Company> companies = getParsedCompanies(paths);
     for (Company company : companies) {
-      DataBaseActions.insertCompany(company);
+      dataBaseActions.insertCompany(company);
     }
   }
 

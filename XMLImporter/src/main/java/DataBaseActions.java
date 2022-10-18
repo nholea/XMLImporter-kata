@@ -9,7 +9,7 @@ import xmlmodels.Staff;
 
 public class DataBaseActions {
 
-  public static void insertCompany(Company company) throws SQLException {
+  public void insertCompany(Company company) throws SQLException {
     try (Connection conn = DriverManager.getConnection(
       "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "postgres")) {
 
@@ -21,7 +21,7 @@ public class DataBaseActions {
     }
   }
 
-  private static int getGeneratedKeyForCompany(Company company, Connection conn) throws SQLException {
+  private int getGeneratedKeyForCompany(Company company, Connection conn) throws SQLException {
     try (PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO company(name) VALUES (?)",
       Statement.RETURN_GENERATED_KEYS)) {
       preparedStatement.setString(1, company.name);
@@ -31,7 +31,7 @@ public class DataBaseActions {
     }
   }
 
-  private static void insertSalary(Connection conn, Staff staff) throws SQLException {
+  private void insertSalary(Connection conn, Staff staff) throws SQLException {
     try (PreparedStatement preparedStatement = conn.prepareStatement(
       "INSERT INTO salary(staff_id, currency, value) VALUES (?,?,?)")) {
       preparedStatement.setInt(1, staff.id);
@@ -41,7 +41,7 @@ public class DataBaseActions {
     }
   }
 
-  private static void insertStaff(Connection conn, int companyId, Staff staff) throws SQLException {
+  private void insertStaff(Connection conn, int companyId, Staff staff) throws SQLException {
     try (PreparedStatement preparedStatement = conn.prepareStatement(
       "INSERT INTO staff(id,company_id, first_name, last_name, nick_name) VALUES (?,?,?,?,?)")) {
       preparedStatement.setInt(1, staff.id);
@@ -53,7 +53,7 @@ public class DataBaseActions {
     }
   }
 
-  private static int getCompanyId(PreparedStatement preparedStatement) throws SQLException {
+  private int getCompanyId(PreparedStatement preparedStatement) throws SQLException {
     int companyId;
     try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
       if (generatedKeys.next()) {
@@ -64,6 +64,5 @@ public class DataBaseActions {
     }
     return companyId;
   }
-
-
+  
 }
