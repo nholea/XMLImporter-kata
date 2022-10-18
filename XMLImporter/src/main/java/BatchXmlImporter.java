@@ -95,8 +95,7 @@ public class BatchXmlImporter {
     File file = new File(path.toString());
     JAXBContext jaxbContext = JAXBContext.newInstance(Company.class);
     Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-    Company company = (Company) jaxbUnmarshaller.unmarshal(file);
-    return company;
+    return (Company) jaxbUnmarshaller.unmarshal(file);
   }
 
   private static List<Path> findXmlFilePathExtension(Path folderPath) throws IOException {
