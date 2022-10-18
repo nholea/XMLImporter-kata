@@ -18,7 +18,7 @@ public class BatchXmlImporter {
     this.dataBaseActions = dataBaseActions;
   }
 
-  public void importFiles(Path folderPath) throws IOException, JAXBException, SQLException {
+  public void importCompaniesFromXmlFiles(Path folderPath) throws IOException, JAXBException, SQLException {
     List<Path> paths = fileExtensionFinder.findXmlPaths(folderPath);
     ArrayList<Company> companies = getParsedCompanies(paths);
     for (Company company : companies) {

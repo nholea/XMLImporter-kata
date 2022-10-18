@@ -29,7 +29,7 @@ class BatchXmlImporterTest {
     BatchXmlImporter batchXmlImporter = new BatchXmlImporter(fileExtensionFinder, dataParsing, dataBaseActions);
     clearTables();
 
-    batchXmlImporter.importFiles(path);
+    batchXmlImporter.importCompaniesFromXmlFiles(path);
 
     var companies = getAllCompanies();
     assertThat(companies).hasSize(2);
