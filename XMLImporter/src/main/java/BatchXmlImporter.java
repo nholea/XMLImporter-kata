@@ -26,11 +26,7 @@ public class BatchXmlImporter {
     List<Path> paths = findXmlFilePathExtension(folderPath);
 
     //Recorre los files con extension XML y los parsea y los añade al array de companies
-    ArrayList<Company> companies = new ArrayList<>();
-    for (Path path : paths) {
-      Company company = parseCompanyToJAXBContextFormat(path);
-      companies.add(company);
-    }
+    ArrayList<Company> companies = getParsedCompanies(paths);
 
     //Recorre array companies y coge una company por su Id y la inserta en base sql 
     for (Company company : companies) {
@@ -73,6 +69,15 @@ public class BatchXmlImporter {
         }
       }
     }
+  }
+
+  private static ArrayList<Company> getParsedCompanies(List<Path> paths) throws JAXBException {
+    ArrayList<Company> companies = new ArrayList<>();
+    for (Path path : paths) {
+      Company company = parseCompanyToJAXBContextFormat(path);
+      companies.add(company);
+    }
+    return companies;
   }
 
   private static Company parseCompanyToJAXBContextFormat(Path path) throws JAXBException {
