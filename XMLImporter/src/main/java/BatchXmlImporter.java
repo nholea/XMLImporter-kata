@@ -24,7 +24,6 @@ public class BatchXmlImporter {
 
   public void importFiles(Path folderPath) throws IOException, JAXBException, SQLException {
     List<Path> paths = findXmlFilePathExtension(folderPath);
-
     //Recorre los files con extension XML y los parsea y los añade al array de companies
     ArrayList<Company> companies = getParsedCompanies(paths);
 
@@ -39,25 +38,11 @@ public class BatchXmlImporter {
           preparedStatement.setString(1, company.name);
           preparedStatement.executeUpdate();
 
-          try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-            if (generatedKeys.next()) {
-              companyId = (int) generatedKeys.getLong(1);
-            } else {
-              throw new SQLException("No ID obtained.");
-            }
-          }
+          companyId = getCompanyId(preparedStatement);
         }
         // Recorre el staff y inserta en la tabla sql el staff de comapany y salary
         for (Staff staff : company.staff) {
-          try (PreparedStatement preparedStatement = conn.prepareStatement(
-            "INSERT INTO staff(id,company_id, first_name, last_name, nick_name) VALUES (?,?,?,?,?)")) {
-            preparedStatement.setInt(1, staff.id);
-            preparedStatement.setInt(2, companyId);
-            preparedStatement.setString(3, staff.firstname);
-            preparedStatement.setString(4, staff.lastname);
-            preparedStatement.setString(5, staff.nickname);
-            preparedStatement.executeUpdate();
-          }
+          insertStaff(conn, companyId, staff);
 
           try (PreparedStatement preparedStatement = conn.prepareStatement(
             "INSERT INTO salary(staff_id, currency, value) VALUES (?,?,?)")) {
@@ -69,6 +54,30 @@ public class BatchXmlImporter {
         }
       }
     }
+  }
+
+  private static void insertStaff(Connection conn, int companyId, Staff staff) throws SQLException {
+    try (PreparedStatement preparedStatement = conn.prepareStatement(
+      "INSERT INTO staff(id,company_id, first_name, last_name, nick_name) VALUES (?,?,?,?,?)")) {
+      preparedStatement.setInt(1, staff.id);
+      preparedStatement.setInt(2, companyId);
+      preparedStatement.setString(3, staff.firstname);
+      preparedStatement.setString(4, staff.lastname);
+      preparedStatement.setString(5, staff.nickname);
+      preparedStatement.executeUpdate();
+    }
+  }
+
+  private static int getCompanyId(PreparedStatement preparedStatement) throws SQLException {
+    int companyId;
+    try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+      if (generatedKeys.next()) {
+        companyId = (int) generatedKeys.getLong(1);
+      } else {
+        throw new SQLException("No ID obtained.");
+      }
+    }
+    return companyId;
   }
 
   private static ArrayList<Company> getParsedCompanies(List<Path> paths) throws JAXBException {
