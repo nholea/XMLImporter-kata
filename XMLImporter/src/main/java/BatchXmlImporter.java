@@ -10,7 +10,6 @@ public class BatchXmlImporter {
 
   private final FileExtensionFinder fileExtensionFinder;
   private final DataParsing dataParsing;
-
   private final DataBaseActions dataBaseActions;
 
   public BatchXmlImporter(FileExtensionFinder fileExtensionFinder, DataParsing dataParsing, DataBaseActions dataBaseActions) {
@@ -18,7 +17,6 @@ public class BatchXmlImporter {
     this.dataParsing = dataParsing;
     this.dataBaseActions = dataBaseActions;
   }
-
 
   public void importFiles(Path folderPath) throws IOException, JAXBException, SQLException {
     List<Path> paths = fileExtensionFinder.findXmlPaths(folderPath);
