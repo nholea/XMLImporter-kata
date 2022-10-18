@@ -24,10 +24,9 @@ public class BatchXmlImporter {
 
   public void importFiles(Path folderPath) throws IOException, JAXBException, SQLException {
     List<Path> paths = findXmlFilePathExtension(folderPath);
-    //Recorre los files con extension XML y los parsea y los añade al array de companies
+
     ArrayList<Company> companies = getParsedCompanies(paths);
 
-    //Recorre array companies y coge una company por su Id y la inserta en base sql 
     for (Company company : companies) {
       try (Connection conn = DriverManager.getConnection(
         "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "postgres")) {
@@ -40,7 +39,7 @@ public class BatchXmlImporter {
 
           companyId = getCompanyId(preparedStatement);
         }
-        
+
         for (Staff staff : company.staff) {
           insertStaff(conn, companyId, staff);
           insertSalary(conn, staff);
