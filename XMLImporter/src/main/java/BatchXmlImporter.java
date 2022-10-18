@@ -37,5 +37,4 @@ public class BatchXmlImporter {
     return companies;
   }
 
-
 }
