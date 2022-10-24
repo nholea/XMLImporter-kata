@@ -13,7 +13,7 @@ public class DataBaseActions {
     try (Connection conn = DriverManager.getConnection(
       "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "postgres")) {
 
-      int companyId = getGeneratedKeyForCompany(company, conn);
+      int companyId = getGeneratedKeyAndInsertCompanyName(company, conn);
       for (Staff staff : company.staff) {
         insertStaff(conn, companyId, staff);
         insertSalary(conn, staff);
@@ -21,7 +21,7 @@ public class DataBaseActions {
     }
   }
 
-  private int getGeneratedKeyForCompany(Company company, Connection connection) throws SQLException {
+  private int getGeneratedKeyAndInsertCompanyName(Company company, Connection connection) throws SQLException {
     try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO company(name) VALUES (?)",
       Statement.RETURN_GENERATED_KEYS)) {
       preparedStatement.setString(1, company.name);
