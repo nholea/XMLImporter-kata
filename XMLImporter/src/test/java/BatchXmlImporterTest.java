@@ -1,5 +1,10 @@
 import static org.assertj.core.api.Assertions.assertThat;
 
+import converters.CompanyConverter;
+import database.DataBaseActions;
+import database.repositories.CompanyRepository;
+import database.repositories.SalaryRepository;
+import database.repositories.StaffRepository;
 import jakarta.xml.bind.JAXBException;
 import java.io.File;
 import java.io.IOException;

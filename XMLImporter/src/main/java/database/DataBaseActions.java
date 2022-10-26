@@ -1,7 +1,11 @@
+package database;
+
+import database.repositories.CompanyRepository;
+import database.repositories.SalaryRepository;
+import database.repositories.StaffRepository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import xmlmodels.Company;
 import xmlmodels.Staff;
 
@@ -36,11 +40,5 @@ public class DataBaseActions {
       salaryRepository.insertSalary(connection, staff);
     }
   }
-
-  public void insertCompanies(ArrayList<Company> companies) throws SQLException {
-    for (Company company : companies) {
-      insertCompany(company);
-    }
-  }
-
+  
 }

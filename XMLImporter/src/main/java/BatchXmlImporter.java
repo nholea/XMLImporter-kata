@@ -1,3 +1,5 @@
+import converters.CompanyConverter;
+import database.DataBaseActions;
 import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -19,9 +21,9 @@ public class BatchXmlImporter {
   }
 
   public void importCompaniesFromXmlFiles(Path folderPath) throws IOException, JAXBException, SQLException {
-    List<Path> paths = fileExtensionFinder.findXmlPaths(folderPath);
+    List<Path> paths = fileExtensionFinder.findPathsWithSpecificExtension(folderPath, ".xml");
     ArrayList<Company> companies = getCompaniesConverted(paths);
-    dataBaseActions.insertCompanies(companies);
+    insertCompaniesIntoDatabase(companies);
   }
 
   private ArrayList<Company> getCompaniesConverted(List<Path> paths) throws JAXBException {
@@ -33,5 +35,10 @@ public class BatchXmlImporter {
     return companies;
   }
 
+  public void insertCompaniesIntoDatabase(ArrayList<Company> companies) throws SQLException {
+    for (Company company : companies) {
+      dataBaseActions.insertCompany(company);
+    }
+  }
 
 }
