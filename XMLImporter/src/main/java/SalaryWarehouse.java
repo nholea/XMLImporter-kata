@@ -5,7 +5,7 @@ import xmlmodels.Staff;
 
 public class SalaryWarehouse {
 
-  private void insertSalary(Connection connection, Staff staff) throws SQLException {
+  public void insertSalary(Connection connection, Staff staff) throws SQLException {
     try (PreparedStatement preparedStatement = connection.prepareStatement(
       "INSERT INTO salary(staff_id, currency, value) VALUES (?,?,?)")) {
       preparedStatement.setInt(1, staff.id);
