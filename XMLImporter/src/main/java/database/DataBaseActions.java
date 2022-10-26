@@ -40,5 +40,5 @@ public class DataBaseActions {
       salaryRepository.insertSalary(connection, staff);
     }
   }
-  
+
 }

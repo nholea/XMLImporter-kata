@@ -2,9 +2,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import converters.CompanyConverter;
 import database.DataBaseActions;
-import database.repositories.CompanyRepository;
-import database.repositories.SalaryRepository;
-import database.repositories.StaffRepository;
+import database.repositories.implementations.CompanyPostgresImpl;
+import database.repositories.implementations.SalaryPostgresImpl;
+import database.repositories.implementations.StaffPostgresImpl;
 import jakarta.xml.bind.JAXBException;
 import java.io.File;
 import java.io.IOException;
@@ -30,10 +30,10 @@ class BatchXmlImporterTest {
   void importXmlIntoDatabase() throws JAXBException, IOException, SQLException {
     CompanyConverter companyConverter = new CompanyConverter();
     FileExtensionFinder fileExtensionFinder = new FileExtensionFinder();
-    CompanyRepository companyRepository = new CompanyRepository();
-    SalaryRepository salaryRepository = new SalaryRepository();
-    StaffRepository staffRepository = new StaffRepository();
-    DataBaseActions dataBaseActions = new DataBaseActions(companyRepository, salaryRepository, staffRepository);
+    CompanyPostgresImpl companyPostgresImpl = new CompanyPostgresImpl();
+    SalaryPostgresImpl salaryPostgresImpl = new SalaryPostgresImpl();
+    StaffPostgresImpl staffPostgresImpl = new StaffPostgresImpl();
+    DataBaseActions dataBaseActions = new DataBaseActions(companyPostgresImpl, salaryPostgresImpl, staffPostgresImpl);
     BatchXmlImporter batchXmlImporter = new BatchXmlImporter(fileExtensionFinder, companyConverter, dataBaseActions);
     clearTables();
 
