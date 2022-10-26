@@ -1,11 +1,11 @@
-package database.repositories;
+package database.repositories.implementations;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import xmlmodels.Staff;
 
-public class StaffRepository {
+public class StaffPostgresImpl {
 
   public void insertStaff(Connection connection, int companyId, Staff staff) throws SQLException {
     try (PreparedStatement preparedStatement = connection.prepareStatement(

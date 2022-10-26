@@ -1,5 +1,6 @@
-package database.repositories;
+package database.repositories.implementations;
 
+import database.repositories.CompanyRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,8 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import xmlmodels.Company;
 
-public class CompanyRepository {
+public class CompanyPostgresImpl implements CompanyRepository {
 
+  @Override
   public int insertCompanyNameAndGetGeneratedKey(Company company, Connection connection) throws SQLException {
     try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO company(name) VALUES (?)",
       Statement.RETURN_GENERATED_KEYS)) {
