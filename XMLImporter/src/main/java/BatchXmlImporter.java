@@ -20,19 +20,23 @@ public class BatchXmlImporter {
 
   public void importCompaniesFromXmlFiles(Path folderPath) throws IOException, JAXBException, SQLException {
     List<Path> paths = fileExtensionFinder.findXmlPaths(folderPath);
-    ArrayList<Company> companies = getParsedCompanies(paths);
-    for (Company company : companies) {
-      dataBaseActions.insertCompany(company);
-    }
+    ArrayList<Company> companies = getCompaniesConverted(paths);
+    insertCompaniesIntoDatabase(companies);
   }
 
-  private ArrayList<Company> getParsedCompanies(List<Path> paths) throws JAXBException {
+  private ArrayList<Company> getCompaniesConverted(List<Path> paths) throws JAXBException {
     ArrayList<Company> companies = new ArrayList<>();
     for (Path path : paths) {
-      Company company = companyConverter.parseCompanyToJAXBContextFormat(path);
+      Company company = companyConverter.companyToJAXBContextFormat(path);
       companies.add(company);
     }
     return companies;
+  }
+
+  private void insertCompaniesIntoDatabase(ArrayList<Company> companies) throws SQLException {
+    for (Company company : companies) {
+      dataBaseActions.insertCompany(company);
+    }
   }
 
 }
