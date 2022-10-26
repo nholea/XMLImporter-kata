@@ -21,7 +21,7 @@ public class BatchXmlImporter {
   public void importCompaniesFromXmlFiles(Path folderPath) throws IOException, JAXBException, SQLException {
     List<Path> paths = fileExtensionFinder.findXmlPaths(folderPath);
     ArrayList<Company> companies = getCompaniesConverted(paths);
-    insertCompaniesIntoDatabase(companies);
+    dataBaseActions.insertCompanies(companies);
   }
 
   private ArrayList<Company> getCompaniesConverted(List<Path> paths) throws JAXBException {
@@ -33,10 +33,5 @@ public class BatchXmlImporter {
     return companies;
   }
 
-  private void insertCompaniesIntoDatabase(ArrayList<Company> companies) throws SQLException {
-    for (Company company : companies) {
-      dataBaseActions.insertCompany(company);
-    }
-  }
 
 }

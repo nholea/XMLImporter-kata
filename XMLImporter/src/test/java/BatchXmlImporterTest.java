@@ -25,11 +25,10 @@ class BatchXmlImporterTest {
   void import_xml_into_database() throws JAXBException, IOException, SQLException {
     CompanyConverter companyConverter = new CompanyConverter();
     FileExtensionFinder fileExtensionFinder = new FileExtensionFinder();
-    DataBaseConnection dataBaseConnection = new DataBaseConnection();
-    CompanyWarehouse companyWarehouse = new CompanyWarehouse();
-    SalaryWarehouse salaryWarehouse = new SalaryWarehouse();
-    StaffWarehouse staffWarehouse = new StaffWarehouse();
-    DataBaseActions dataBaseActions = new DataBaseActions(dataBaseConnection, companyWarehouse, salaryWarehouse, staffWarehouse);
+    CompanyRepository companyRepository = new CompanyRepository();
+    SalaryRepository salaryRepository = new SalaryRepository();
+    StaffRepository staffRepository = new StaffRepository();
+    DataBaseActions dataBaseActions = new DataBaseActions(companyRepository, salaryRepository, staffRepository);
     BatchXmlImporter batchXmlImporter = new BatchXmlImporter(fileExtensionFinder, companyConverter, dataBaseActions);
     clearTables();
 

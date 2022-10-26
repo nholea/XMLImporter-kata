@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import xmlmodels.Company;
 
-public class CompanyWarehouse {
+public class CompanyRepository {
 
   public int insertCompanyNameAndGetGeneratedKeyAnd(Company company, Connection connection) throws SQLException {
     try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO company(name) VALUES (?)",

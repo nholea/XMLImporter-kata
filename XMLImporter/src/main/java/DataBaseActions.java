@@ -1,32 +1,46 @@
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import xmlmodels.Company;
 import xmlmodels.Staff;
 
 public class DataBaseActions {
 
-  private final DataBaseConnection dataBaseConnection;
-  private final CompanyWarehouse companyWarehouse;
-  private final SalaryWarehouse salaryWarehouse;
-  private final StaffWarehouse staffWarehouse;
 
-  public DataBaseActions(DataBaseConnection dataBaseConnection, CompanyWarehouse companyWarehouse, SalaryWarehouse salaryWarehouse,
-    StaffWarehouse staffWarehouse) {
-    this.dataBaseConnection = dataBaseConnection;
-    this.companyWarehouse = companyWarehouse;
-    this.salaryWarehouse = salaryWarehouse;
-    this.staffWarehouse = staffWarehouse;
+  private final CompanyRepository companyRepository;
+  private final SalaryRepository salaryRepository;
+  private final StaffRepository staffRepository;
+
+  public DataBaseActions(CompanyRepository companyRepository, SalaryRepository salaryRepository,
+    StaffRepository staffRepository) {
+
+    this.companyRepository = companyRepository;
+    this.salaryRepository = salaryRepository;
+    this.staffRepository = staffRepository;
   }
 
+  private Connection getPostgresConnection() throws SQLException {
+
+    return DriverManager.getConnection(
+      "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "postgres");
+  }
+
+
   public void insertCompany(Company company) throws SQLException {
-    Connection connection = dataBaseConnection.getPostgresConnection();
+    Connection connection = getPostgresConnection();
 
-    int companyId = companyWarehouse.insertCompanyNameAndGetGeneratedKeyAnd(company, connection);
+    int companyId = companyRepository.insertCompanyNameAndGetGeneratedKeyAnd(company, connection);
     for (Staff staff : company.staff) {
-      staffWarehouse.insertStaff(connection, companyId, staff);
-      salaryWarehouse.insertSalary(connection, staff);
+      staffRepository.insertStaff(connection, companyId, staff);
+      salaryRepository.insertSalary(connection, staff);
     }
+  }
 
+  public void insertCompanies(ArrayList<Company> companies) throws SQLException {
+    for (Company company : companies) {
+      insertCompany(company);
+    }
   }
 
 }
