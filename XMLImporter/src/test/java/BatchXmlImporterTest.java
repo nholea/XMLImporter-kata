@@ -23,10 +23,10 @@ class BatchXmlImporterTest {
 
   @Test
   public void import_xml_into_database() throws JAXBException, IOException, SQLException {
-    DataParsing dataParsing = new DataParsing();
+    CompanyConverter companyConverter = new CompanyConverter();
     FileExtensionFinder fileExtensionFinder = new FileExtensionFinder();
     DataBaseActions dataBaseActions = new DataBaseActions();
-    BatchXmlImporter batchXmlImporter = new BatchXmlImporter(fileExtensionFinder, dataParsing, dataBaseActions);
+    BatchXmlImporter batchXmlImporter = new BatchXmlImporter(fileExtensionFinder, companyConverter, dataBaseActions);
     clearTables();
 
     batchXmlImporter.importCompaniesFromXmlFiles(path);

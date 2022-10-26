@@ -5,9 +5,9 @@ import java.io.File;
 import java.nio.file.Path;
 import xmlmodels.Company;
 
-public class DataParsing {
+public class CompanyConverter {
 
-  public Company parseCompanyToJAXBContextFormat(Path path) throws JAXBException {
+  public Company companyToJAXBContextFormat(Path path) throws JAXBException {
     File file = new File(path.toString());
     JAXBContext jaxbContext = JAXBContext.newInstance(Company.class);
     Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

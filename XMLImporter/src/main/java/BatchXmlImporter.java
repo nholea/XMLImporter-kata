@@ -9,12 +9,12 @@ import xmlmodels.Company;
 public class BatchXmlImporter {
 
   private final FileExtensionFinder fileExtensionFinder;
-  private final DataParsing dataParsing;
+  private final CompanyConverter companyConverter;
   private final DataBaseActions dataBaseActions;
 
-  public BatchXmlImporter(FileExtensionFinder fileExtensionFinder, DataParsing dataParsing, DataBaseActions dataBaseActions) {
+  public BatchXmlImporter(FileExtensionFinder fileExtensionFinder, CompanyConverter companyConverter, DataBaseActions dataBaseActions) {
     this.fileExtensionFinder = fileExtensionFinder;
-    this.dataParsing = dataParsing;
+    this.companyConverter = companyConverter;
     this.dataBaseActions = dataBaseActions;
   }
 
@@ -29,7 +29,7 @@ public class BatchXmlImporter {
   private ArrayList<Company> getParsedCompanies(List<Path> paths) throws JAXBException {
     ArrayList<Company> companies = new ArrayList<>();
     for (Path path : paths) {
-      Company company = dataParsing.parseCompanyToJAXBContextFormat(path);
+      Company company = companyConverter.parseCompanyToJAXBContextFormat(path);
       companies.add(company);
     }
     return companies;
