@@ -22,10 +22,14 @@ class BatchXmlImporterTest {
     System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources");
 
   @Test
-  public void import_xml_into_database() throws JAXBException, IOException, SQLException {
+  void import_xml_into_database() throws JAXBException, IOException, SQLException {
     CompanyConverter companyConverter = new CompanyConverter();
     FileExtensionFinder fileExtensionFinder = new FileExtensionFinder();
-    DataBaseActions dataBaseActions = new DataBaseActions();
+    DataBaseConnection dataBaseConnection = new DataBaseConnection();
+    CompanyWarehouse companyWarehouse = new CompanyWarehouse();
+    SalaryWarehouse salaryWarehouse = new SalaryWarehouse();
+    StaffWarehouse staffWarehouse = new StaffWarehouse();
+    DataBaseActions dataBaseActions = new DataBaseActions(dataBaseConnection, companyWarehouse, salaryWarehouse, staffWarehouse);
     BatchXmlImporter batchXmlImporter = new BatchXmlImporter(fileExtensionFinder, companyConverter, dataBaseActions);
     clearTables();
 
