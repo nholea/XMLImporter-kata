@@ -9,7 +9,7 @@ import xmlmodels.Company;
 
 public class CompanyRepository {
 
-  public int insertCompanyNameAndGetGeneratedKeyAnd(Company company, Connection connection) throws SQLException {
+  public int insertCompanyNameAndGetGeneratedKey(Company company, Connection connection) throws SQLException {
     try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO company(name) VALUES (?)",
       Statement.RETURN_GENERATED_KEYS)) {
       preparedStatement.setString(1, company.name);
