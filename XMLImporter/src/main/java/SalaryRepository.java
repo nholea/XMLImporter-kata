@@ -3,7 +3,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import xmlmodels.Staff;
 
-public class SalaryWarehouse {
+public class SalaryRepository {
 
   public void insertSalary(Connection connection, Staff staff) throws SQLException {
     try (PreparedStatement preparedStatement = connection.prepareStatement(
