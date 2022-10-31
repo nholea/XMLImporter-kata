@@ -35,7 +35,7 @@ public class BatchXmlImporter {
     return companies;
   }
 
-  public void insertCompaniesIntoDatabase(ArrayList<Company> companies) throws SQLException {
+  private void insertCompaniesIntoDatabase(ArrayList<Company> companies) throws SQLException {
     for (Company company : companies) {
       dataBaseActions.insertCompany(company);
     }
