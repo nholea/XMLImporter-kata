@@ -11,7 +11,7 @@ import xmlmodels.Company;
 public class CompanyPostgresImpl implements CompanyRepository {
 
   @Override
-  public int insertCompanyNameAndGetGeneratedKey(Company company, Connection connection) throws SQLException {
+  public int insertCompanyAndGetGeneratedKey(Company company, Connection connection) throws SQLException {
     try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO company(name) VALUES (?)",
       Statement.RETURN_GENERATED_KEYS)) {
       preparedStatement.setString(1, company.name);

@@ -6,6 +6,6 @@ import xmlmodels.Company;
 
 public interface CompanyRepository {
 
-  int insertCompanyNameAndGetGeneratedKey(Company company, Connection connection) throws SQLException;
+  int insertCompanyAndGetGeneratedKey(Company company, Connection connection) throws SQLException;
 
 }

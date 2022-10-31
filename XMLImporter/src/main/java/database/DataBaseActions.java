@@ -34,7 +34,7 @@ public class DataBaseActions {
   public void insertCompany(Company company) throws SQLException {
     Connection connection = getPostgresConnection();
 
-    int companyId = companyRepository.insertCompanyNameAndGetGeneratedKey(company, connection);
+    int companyId = companyRepository.insertCompanyAndGetGeneratedKey(company, connection);
     for (Staff staff : company.staff) {
       staffRepository.insertStaff(connection, companyId, staff);
       salaryRepository.insertSalary(connection, staff);
