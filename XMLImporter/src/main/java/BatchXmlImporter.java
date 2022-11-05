@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import xmlmodels.Company;
 
 public class BatchXmlImporter {
@@ -21,18 +22,21 @@ public class BatchXmlImporter {
   }
 
   public void importCompaniesFromXmlFiles(Path folderPath) throws IOException, JAXBException, SQLException {
-    List<Path> paths = fileExtensionFinder.findPathsWithSpecificExtension(folderPath, ".xml");
-    ArrayList<Company> companies = getCompaniesConverted(paths);
+    List<Path> paths = fileExtensionFinder.findPathsWithExtension(folderPath, ".xml");
+    ArrayList<Company> companies = getCompaniesConvertedFrom(paths);
     insertCompaniesIntoDatabase(companies);
   }
 
-  private ArrayList<Company> getCompaniesConverted(List<Path> paths) throws JAXBException {
-    ArrayList<Company> companies = new ArrayList<>();
-    for (Path path : paths) {
-      Company company = companyConverter.companyToJAXBContextFormat(path);
-      companies.add(company);
-    }
-    return companies;
+  private ArrayList<Company> getCompaniesConvertedFrom(List<Path> paths) throws JAXBException {
+    return (ArrayList<Company>) paths.stream().map(path -> {
+      try {
+        return companyConverter.companyToJAXBContextFormat(path);
+      } catch (JAXBException e) {
+        throw new RuntimeException(e);
+      }
+
+    }).collect(Collectors.toList());
+
   }
 
   private void insertCompaniesIntoDatabase(ArrayList<Company> companies) throws SQLException {

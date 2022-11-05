@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public class FileExtensionFinder {
 
-  public List<Path> findPathsWithSpecificExtension(Path folderPath, String fileExtension) throws IOException {
+  public List<Path> findPathsWithExtension(Path folderPath, String fileExtension) throws IOException {
     List<Path> paths;
     try (Stream<Path> pathStream = walk(folderPath)
       .filter(Files::isRegularFile)
